@@ -1,6 +1,9 @@
 package covid.executor;
 
-import covid.service.RegionService;
+import covid.service.ProvinceService;
+import covid.service.ReportService;
+
+import java.util.List;
 
 public class ExecutorJobHandler implements Runnable {
 
@@ -12,8 +15,24 @@ public class ExecutorJobHandler implements Runnable {
 
             System.out.println("[INFO] Starting job execution...");
 
-            RegionService regionService = new RegionService();
-            regionService.fetchRegions();
+            String iso = "GTM";
+            String date = "2022-04-16";
+
+            ProvinceService provinceService = new ProvinceService();
+            List<String> provinces = provinceService.fetchProvinces(iso);
+
+            ReportService reportService = new ReportService();
+
+            for (String province : provinces) {
+                if (province != null && !province.isBlank()) {
+                    String reportJson = reportService.fetchReportByProvince(iso, province, date);
+                    if (reportJson != null) {
+                        System.out.println("[INFO] Report fetched for " + province);
+                    }
+                } else {
+                    System.out.println("[WARNING] Skipping empty province entry.");
+                }
+            }
 
             System.out.println("[INFO] Job execution completed.");
 

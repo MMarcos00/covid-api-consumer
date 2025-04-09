@@ -40,7 +40,6 @@ public class RegionService {
                 in.close();
 
                 logger.info("API Response (Regions):\n" + response.toString());
-                // Aquí luego se puede parsear el JSON si se necesita
 
             } else {
                 logger.warning("Failed to fetch regions. Response Code: " + responseCode);
